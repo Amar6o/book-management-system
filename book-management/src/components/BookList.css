@@ -1,0 +1,125 @@
+/* BookList.css */
+
+/* Aligning title to center */
+.book-list-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Add padding around the table and center it */
+.table {
+    margin: 20px auto;
+    width: 95%;
+    border-collapse: collapse;
+}
+
+/* Styling for the table headers */
+.table th {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+/* Styling for table data cells */
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Add hover effect on table rows */
+.table tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Pagination container */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Pagination buttons */
+.pagination .page-item .page-link {
+    padding: 8px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #007bff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Active page styling */
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+/* Hover effect for pagination */
+.pagination .page-item .page-link:hover {
+    background-color: #f1f1f1;
+    color: #007bff;
+}
+
+/* Button for Delete action */
+.btn-danger {
+    background-color: #e74a3b;
+    color: white;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 1px solid #e74a3b;
+    transition: background-color 0.3s ease;
+}
+
+/* Button on hover */
+.btn-danger:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+/* Button active state */
+.btn-danger:active {
+    background-color: #d35400;
+    border-color: #d35400;
+}
+
+/* General table container styling */
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Button container for actions like Add Book */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.button-container button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Button on hover */
+.button-container button:hover {
+    background-color: #0056b3;
+    cursor: pointer;
+}
