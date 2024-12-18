@@ -8,7 +8,7 @@ const BookList = () => {
     const [books, setBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [sortField, setSortField] = useState("");
+    const [sortField, setSortField] = useState("bookId");
     const [sortOrder, setSortOrder] = useState("asc");
 
     const pageSize = 10;
@@ -21,20 +21,29 @@ const BookList = () => {
                 params: {
                     page: currentPage - 1,
                     size: pageSize,
-                    sort: sortField ? `${sortField},${sortOrder}` : undefined,
+                    sortField: sortField,       
+                    sortOrder: sortOrder,  
                 },
             });
 
+            console.log("Fetching books with:", {
+                page: currentPage - 1,
+                size: pageSize,
+                sort: `${sortField},${sortOrder}`,
+            });
+    
             setBooks(response.data.content || []);
             setTotalPages(response.data.totalPages || 1);
         } catch (error) {
             console.error("Error fetching books:", error.message || error);
         }
     }, [currentPage, sortField, sortOrder]);
+    
 
     useEffect(() => {
+        console.log("Fetching books with updated sortField:", sortField, "and sortOrder:", sortOrder);
         fetchBooks();
-    }, [fetchBooks]);
+    }, [fetchBooks, sortField, sortOrder]);
 
     // Delete a book
     const handleDelete = async (bookId) => {
@@ -49,9 +58,16 @@ const BookList = () => {
     // Handle sorting
     const handleSort = (field) => {
         const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
+        console.log("Sorting field:", field, "Order:", order);
         setSortField(field);
         setSortOrder(order);
+    };    
+
+    const getSortArrow = (field) => {
+        if (sortField !== field) return ""; // No arrow for inactive columns
+        return sortOrder === "asc" ? "↑" : "↓"; // Up arrow for ascending, down arrow for descending
     };
+    
 
     // Handle page change
     const handlePageChange = (pageNumber) => {
@@ -89,17 +105,29 @@ const BookList = () => {
         <div>
             <h2 className="book-list-title">Book List</h2>
             <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th onClick={() => handleSort("bookId")}>Book ID</th>
-                        <th onClick={() => handleSort("title")}>Title</th>
-                        <th onClick={() => handleSort("author")}>Author</th>
-                        <th onClick={() => handleSort("publicationDate")}>Publication Date</th>
-                        <th onClick={() => handleSort("genre")}>Genre</th>
-                        <th onClick={() => handleSort("rating")}>Rating</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+            <thead>
+                <tr>
+                    <th onClick={() => handleSort("bookId")}>
+                        Book ID {getSortArrow("bookId")}
+                    </th>
+                    <th onClick={() => handleSort("title")}>
+                        Title {getSortArrow("title")}
+                    </th>
+                    <th onClick={() => handleSort("author")}>
+                        Author {getSortArrow("author")}
+                    </th>
+                    <th onClick={() => handleSort("publicationDate")}>
+                        Publication Date {getSortArrow("publicationDate")}
+                    </th>
+                    <th onClick={() => handleSort("genre")}>
+                        Genre {getSortArrow("genre")}
+                    </th>
+                    <th onClick={() => handleSort("rating")}>
+                        Rating {getSortArrow("rating")}
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
                 <tbody>
                     {books.length > 0 ? (
                         books.map((book) => (
