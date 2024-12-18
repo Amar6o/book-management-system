@@ -11,6 +11,7 @@ public interface BookRepository extends MongoRepository<Book, String > {
     // Custom query method to find a book by its bookId
     Book findByBookId(String bookId);
 
-    Page<Book> findAll(Pageable pageable);  // Fetch all books with pagination
+    // Paging and sorting together
+    Page<Book> findAll(Pageable pageable);
 
 }

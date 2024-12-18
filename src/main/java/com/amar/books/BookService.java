@@ -3,7 +3,9 @@ package com.amar.books;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,9 +49,20 @@ public class BookService {
     }
 
     // Fetch paginated books
-    public Page<Book> getBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable);  // Fetch books with pagination
+    public Page<Book> getBooks(int page, int size, String sortField, String sortOrder) {
+        Sort sort = Sort.by(Sort.Order.by(sortField));
+
+        if ("desc".equals(sortOrder)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return bookRepository.findAll(pageable);
     }
+
+
 
     public Book addReview(String bookId, String review){
         Book book = bookRepository.findById(bookId).orElse(null);
