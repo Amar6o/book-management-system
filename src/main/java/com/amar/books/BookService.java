@@ -50,30 +50,16 @@ public class BookService {
 
     // Fetch paginated books
     public Page<Book> getBooks(int page, int size, String sortField, String sortOrder) {
-        Sort sort = Sort.by(Sort.Order.by(sortField));
+        Sort sort = Sort.by(Sort.Order.by(sortField));  // Using the dynamic sortField
 
         if ("desc".equals(sortOrder)) {
-            sort = sort.descending();
+            sort = sort.descending();          // Change to descending if sortOrder is desc
         } else {
-            sort = sort.ascending();
+            sort = sort.ascending();           // Default to ascending
         }
 
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return bookRepository.findAll(pageable);
-    }
-
-
-
-    public Book addReview(String bookId, String review){
-        Book book = bookRepository.findById(bookId).orElse(null);
-        if (book != null){
-            if(book.getReviews() == null) {
-                book.setReviews(new ArrayList<>());
-            }
-            book.getReviews().add(review);
-            return bookRepository.save(book);
-        }
-        return null;
+        Pageable pageable = PageRequest.of(page, size, sort);       // Page request with sorting
+        return bookRepository.findAll(pageable);                    // Fetch the books with pagination and sorting
     }
 
     //Method to find a book by its bookId
@@ -82,4 +68,7 @@ public class BookService {
     }
 
 
+    public List<Book> searchBooks(String query){
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query);
+    }
 }

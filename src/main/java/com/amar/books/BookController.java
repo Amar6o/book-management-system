@@ -56,16 +56,6 @@ public class BookController {
         return bookService.getBooks(page, size, sortField, sortOrder);
     }
 
-    @PutMapping("/{bookId}/reviews")
-    public ResponseEntity<Book> addReview(@PathVariable String bookId, @RequestBody String review){
-        Book updatedBook = bookService.addReview(bookId, review);
-        if (updatedBook != null){
-            return ResponseEntity.ok(updatedBook);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     // API endpoint to find book by bookId
     @GetMapping("/findByBookId/{bookId}")
     public ResponseEntity<Book> getBookByBookId(@PathVariable String bookId){
@@ -75,6 +65,11 @@ public class BookController {
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/search")
+    public List<Book> searchBooks(@RequestParam String query){
+        return bookService.searchBooks(query);
     }
 
 }
