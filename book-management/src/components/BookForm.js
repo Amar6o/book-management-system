@@ -19,6 +19,8 @@ const BookForm = ({ onBookAdded }) => {
 
   const genres = ['Fiction', 'NonFiction', 'Mystery', 'Fantasy', 'Romance', 'SciFi', 'Others'];
 
+  const [successMessage, setSuccessMessage] = useState('');    // New state to store the success notification
+
   const validate = () => {
     const newErrors = {};
 
@@ -53,8 +55,21 @@ const BookForm = ({ onBookAdded }) => {
 
       await axios.post('http://localhost:8080/api/v1/books', bookData);
 
-      // Redirect to the book list page after successful submission
-      navigate('/list'); // Assuming you want to go to the /list page
+      // Set success message
+      setSuccessMessage('Book added successfully!');
+
+      // Clear the form
+      setBookData({
+        title: '',
+        author: '',
+        publicationDate: '',
+        isbn: '',
+        genre: 'Fiction',
+        rating: '1',
+      });
+
+      // Redirect to the book list page after a delay
+      setTimeout(() => navigate('/list'), 2000); // Assuming you want to go to the /list page
     } catch (error) {
       console.error("Error adding book:", error);
     }
@@ -63,6 +78,13 @@ const BookForm = ({ onBookAdded }) => {
   return (
     <div className="form-container">
       <h1 className="form-title">Book Management System</h1>
+
+      {/* Success Message*/}
+      {successMessage && (
+        <div className="alert alert-success" role="alert">
+          {successMessage}
+        </div>
+      )}
 
     <form onSubmit={handleSubmit}>
       <div className="mb-3">

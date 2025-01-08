@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { Table, Button, Pagination } from "react-bootstrap";
+import { Table, Button, Pagination, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import './BookList.css';
 
@@ -10,6 +10,7 @@ const BookList = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [sortField, setSortField] = useState("bookId");
     const [sortOrder, setSortOrder] = useState("asc");
+    const [searchQuery, setSearchQuery] = useState("");
 
     const pageSize = 10;
     const navigate = useNavigate();
@@ -40,6 +41,7 @@ const BookList = () => {
     }, [currentPage, sortField, sortOrder]);
     
 
+    // Calls the fetchBooks function when the dependencies change
     useEffect(() => {
         console.log("Fetching books with updated sortField:", sortField, "and sortOrder:", sortOrder);
         fetchBooks();
@@ -47,23 +49,34 @@ const BookList = () => {
 
     // Delete a book
     const handleDelete = async (bookId) => {
-        try {
-            await axios.delete(`http://localhost:8080/api/v1/books/${bookId}`);
-            fetchBooks(); // Refresh the list after deletion
-        } catch (error) {
-            console.error("Error deleting book:", error.message || error);
-        }
+        if(window.confirm("Are you sure about deleting this book")){
+            try {
+                await axios.delete(`http://localhost:8080/api/v1/books/${bookId}`);
+                
+                alert("Book deleted successfully");
+
+                fetchBooks(); // Refresh the list after deletion
+            } catch (error) {
+                console.error("Error deleting book:", error.message || error);
+            }
+    }
     };
 
-    // Handle sorting
+    // Handle sorting (only for allowed fields)
     const handleSort = (field) => {
-        const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
-        console.log("Sorting field:", field, "Order:", order);
-        setSortField(field);
-        setSortOrder(order);
+        const sortableFields = ["bookId", "title", "author"];
+        if(sortableFields.includes(field)){
+            const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
+            console.log("Sorting field:", field, "Order:", order);
+            setSortField(field);
+            setSortOrder(order);
+        }
     };    
 
+    // Get sort arrow for sortable columns
     const getSortArrow = (field) => {
+        const sortableFields = ["bookId", "title", "author"];
+        if(!sortableFields.includes(field)) return "";  // No arrow for non-sortable columns
         if (sortField !== field) return ""; // No arrow for inactive columns
         return sortOrder === "asc" ? "↑" : "↓"; // Up arrow for ascending, down arrow for descending
     };
@@ -101,9 +114,35 @@ const BookList = () => {
         navigate(`/book-details/${bookId}`);
     };
 
+    const handleSearch = async () => {
+        if(!searchQuery.trim()){
+            fetchBooks();
+            return;
+        }
+        try{
+            const response = await axios.get("http://localhost:8080/api/v1/books/search", {
+                params: { query: searchQuery},
+            });
+            setBooks(response.data);
+        }catch(error){
+            console.error("Error searching books:", error.message || error);
+        }
+    }
+
     return (
         <div>
             <h2 className="book-list-title">Book List</h2>
+            <Form className="mb-3">
+                <Form.Control
+                    type="text"
+                    placeholder="Search by title or author"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Button variant="primary" onClick={handleSearch} className="mt-2">
+                    Search
+                </Button>
+            </Form>
             <Table striped bordered hover>
             <thead>
                 <tr>
@@ -116,14 +155,14 @@ const BookList = () => {
                     <th onClick={() => handleSort("author")}>
                         Author {getSortArrow("author")}
                     </th>
-                    <th onClick={() => handleSort("publicationDate")}>
-                        Publication Date {getSortArrow("publicationDate")}
+                    <th>
+                        Publication Date 
                     </th>
-                    <th onClick={() => handleSort("genre")}>
-                        Genre {getSortArrow("genre")}
+                    <th>
+                        Genre 
                     </th>
-                    <th onClick={() => handleSort("rating")}>
-                        Rating {getSortArrow("rating")}
+                    <th>
+                        Rating 
                     </th>
                     <th>Actions</th>
                 </tr>

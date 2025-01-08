@@ -1,0 +1,75 @@
+/* src/components/HomePage.css */
+
+/* Basic styling for the home page */
+.home-page {
+    text-align: center;
+    padding: 50px;
+    font-family: Arial, sans-serif;
+}
+
+/* Styling for the header */
+.home-page h1 {
+    font-size: 3rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Styling for the paragraph */
+.home-page p {
+    font-size: 1.2rem;
+    color: #34495e;
+    margin-bottom: 30px;
+}
+
+/* Button styling */
+.home-page .btn {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Primary button style */
+.home-page .btn-primary {
+    background-color: #3498db;
+    color: white;
+    border: none;
+}
+
+.home-page .btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Secondary button style */
+.home-page .btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+}
+
+.home-page .btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* Margin between buttons */
+.home-page .btn + .btn {
+    margin-left: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .home-page h1 {
+        font-size: 2rem;
+    }
+
+    .home-page p {
+        font-size: 1rem;
+    }
+
+    .home-page .btn {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+}
